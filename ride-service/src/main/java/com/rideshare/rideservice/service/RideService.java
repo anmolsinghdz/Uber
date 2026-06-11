@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -94,13 +95,18 @@ public class RideService {
 
     }
 
+    @Transactional
     public void updateRideWithDriver(String rideId, String driverId){
         Ride ride = rideRepository.findById(rideId)
                 .orElseThrow(() -> new RuntimeException("Ride not Found"));
 
         ride.setDriverId(driverId);
         ride.setStatus(RideStatus.ACCEPTED);
-        rideRepository.save(ride);
+
+        // Force the persistence context to update and write the SQL instantly
+        rideRepository.saveAndFlush(ride);
+
+        log.info("Successfully updated database. Ride status is now: {}", ride.getStatus());
     }
 
     public RideResponse startRide(String rideId) {
@@ -162,7 +168,7 @@ public class RideService {
         RideResponse response = new RideResponse();
         response.setId(ride.getId());
         response.setRiderId(ride.getRiderId());
-        response.setDriverId(ride.getPickupAddress());
+        response.setDriverId(ride.getDriverId());
         response.setPickupLatitude(ride.getPickupLatitude());
         response.setPickupLongitude(ride.getPickupLongitude());
         response.setPickupAddress(ride.getPickupAddress());

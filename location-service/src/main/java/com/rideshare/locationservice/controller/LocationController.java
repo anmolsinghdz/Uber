@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LocationController {
 
-    private LocationService locationService;
+    private final LocationService locationService;
 
     //driver phone calls this every 3 second
     @PostMapping("/drivers/update")

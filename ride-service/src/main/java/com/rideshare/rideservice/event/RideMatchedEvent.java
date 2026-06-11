@@ -1,13 +1,8 @@
-package com.rideshare.matchingservice.event;
+package com.rideshare.rideservice.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-/**
- * event published to kafka topic: ride.matched
- * consumed by Ride Service to update ride with assigned driver
- */
 
 @Data
 @NoArgsConstructor
