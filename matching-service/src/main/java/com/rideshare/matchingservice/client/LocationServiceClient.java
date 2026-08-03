@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "location-service", url = "${location.service.url}")
+@FeignClient(name = "LOCATION-SERVICE")
 public interface LocationServiceClient {
 
     @GetMapping("/api/v1/locations/drivers/nearby")

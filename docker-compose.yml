@@ -64,6 +64,44 @@ services:
     networks:
       - rideshare-network
 
+  # ─────────────────────────────────────────
+  # SPRING CLOUD CONFIG SERVER
+  # ─────────────────────────────────────────
+  config-server:
+    build: ./config-server
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - rideshare-network
+
+  # ─────────────────────────────────────────
+  # NETFLIX EUREKA DISCOVERY SERVER
+  # ─────────────────────────────────────────
+  eureka-server:
+    build: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+    networks:
+      - rideshare-network
+
+  # ─────────────────────────────────────────
+  # SPRING CLOUD API GATEWAY
+  # ─────────────────────────────────────────
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+      - config-server
+    networks:
+      - rideshare-network
+
 volumes:
   mysql-data:
 
